@@ -1,0 +1,14 @@
+name: Hax
+main: me.signifies.hax.Hax
+version: 0.0.1
+description: An effort to create a community enhanced AntiCheat system.
+author: Signifies
+authors: [you,etc]
+website: www.github.com/Signifies/hax
+
+commands:
+  idk:
+    description: Just edit this and add command later.
+    aliases: [idontknow]
+  test:
+    description: Testing command for whatever.

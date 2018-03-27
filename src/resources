@@ -1,0 +1,23 @@
+If you need some inspiration to get a general idea of how Anticheat works (god knows I do), this is helpful.
+# https://github.com/NoCheatPlus/NoCheatPlus
+
+# Notes from Spigot conversations.
+A few things:
+- Reach is measured from the centre of the attacking player's head to the edge of the victim's hitbox (you'll need to do a raytrace)
+- Default client reach is 3.0 blocks (of course don't just rely on this exact value)
+- Default server reach is 6.0 blocks (take this into account when deciding an absolute maximum reach which players should be able to hit from, you may want to change it).
+- Account for latency; this can include increasing max allowed reach based on ping, expanding the hitbox slightly, or a more advanced method:
+
+When a player attacks, the client decides whether to send an attack packet based on the distance of the victim from the client's perspective. For players with high latency, this can mean false flags in badly made anticheats because although the client believed the entity was within range, the server had a more up-to-date record of victim player's location which placed them outside the allowed range.
+To counter this, record the time each player sends a movement packet (along with the time it was received by the server), build a hitbox from the movement information from the packet, and store the last X amount of these (say 1 or 2 seconds worth (i.e: 20/40 movements)) in a TreeMap (you'll see why in a second), so you effectively have a short-term history of each player's latest movements.
+When a player attempts to attack an entity, subtract their ping from the current time in milliseconds, and that will give you the (approximate) time they attacked on their client. Use the TreeMap#floorKey method with this value on the map of the victim's movement history to find where the victim's hitbox was when the player sent the attack packet, and compare the distance to the stored hitbox (rather than the one the server has - which is the lateset one).
+- Don't detect and punish players based on single hits, but on their behaviour over time
+
+# Notes on Hitbox.
+The client calculates from the eye location of the attacker along
+the line of sight to an expanded version of the client hitbox
+(normal is 0.6x0.6 which you can see with f3+h or sth), hitbox for attack is 0.8x0.8.
+
+# A lightweight condensed version of ProtocalLib for working with packets.
+
+https://github.com/aadnk/ProtocolLib/blob/master/modules/TinyProtocol/src/main/java/com/comphenix/tinyprotocol/ExamplePlugin.java

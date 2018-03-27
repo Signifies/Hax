@@ -1,0 +1,15 @@
+# Hax Configuration file for those who cannot make up their mind...#             #
+# Configuration system supports multiline comments within the configuration file.#
+##################################################################################
+#
+#
+Database:
+  Enabled: false
+  host: 1.0.0.0
+  username: admin
+  password: password
+  database: user_db
+#
+# Who wouldn't want a place for messages?
+#
+Messages:
